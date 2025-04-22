@@ -8,7 +8,7 @@ class interfaz_docente:
     def __init__(self, root, usuario):
         self.root = root
         self.root.title("Sistema docente")
-        self.root.geometry("650x400")
+        self.root.geometry("650x450")
         self.root.resizable(True, True)
 
         # Configuración de CustomTkinter
@@ -66,7 +66,7 @@ class interfaz_docente:
         self.label_usuario.pack(pady=10)
 
         # Frame scrollable para mostrar la lista de alumnos
-        self.scrollableframe_alumnos = ctk.CTkScrollableFrame(self.frame_alumnos)
+        self.scrollableframe_alumnos = ctk.CTkScrollableFrame(self.frame_alumnos, width=250, height=200)
         self.scrollableframe_alumnos.pack(pady=10)
 
         # Encabezados de columna

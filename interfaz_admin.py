@@ -11,8 +11,8 @@ class InterfazAdmin:
         # Configura la ventana
         self.root = root
         self.root.title("Interfaz Administrador")
-        self.root.geometry("700x700")
-        self.root.resizable(True, True)
+        self.root.geometry("700x650")
+        self.root.resizable(False, False)
 
         # Configura el tema de la interfaz
         ctk.set_appearance_mode("dark")
@@ -154,7 +154,7 @@ class InterfazAdmin:
             contraseña = self.entry_contraseña.get()
             nombre = self.entry_nombre.get()
             tipo = self.combobox_tipo.get()
-            c.admin.crear_usuario(usuario, contraseña, nombre, tipo)
+            c.admin.crear_usuario(self, usuario, contraseña, nombre, tipo)
             messagebox.showinfo("Éxito", "Usuario creado satisfactoriamente.")
             self.frame_usuarios.destroy()
             self._construir_tab_usuarios()
@@ -165,14 +165,14 @@ class InterfazAdmin:
             contraseña = self.entry_contraseña.get()
             nombre = self.entry_nombre.get()
             tipo = self.combobox_tipo.get()
-            c.admin.modificar_usuario(usuario, contraseña, nombre, tipo)
+            c.admin.modificar_usuario(self, id,usuario, contraseña, nombre, tipo)
             messagebox.showinfo("Éxito", "Usuario modificado satisfactoriamente.")
             self.frame_usuarios.destroy()
             self._construir_tab_usuarios()
 
         def eliminar_usuario():
             id = self.entry_idusuario.get()
-            c.admin.eliminar_usuario(id)
+            c.admin.eliminar_usuario(self,id)
             messagebox.showinfo("Éxito", "Usuario eliminado satisfactoriamente.")
             self.frame_usuarios.destroy()
             self._construir_tab_usuarios()
@@ -208,8 +208,11 @@ class InterfazAdmin:
         lbl_id.grid(row=0, column=0, padx=10)
         lbl_nombre = ctk.CTkLabel(self.scrollableframe_grupos, text="Nombre de Grupo")
         lbl_nombre.grid(row=0, column=1, padx=10)
+        lbl_iddocente = ctk.CTkLabel(self.scrollableframe_grupos, text="ID Docente")
+        lbl_iddocente.grid(row=0, column=2, padx=10)
         lbl_periodo = ctk.CTkLabel(self.scrollableframe_grupos, text="Periodo Académico")
-        lbl_periodo.grid(row=0, column=2, padx=10)
+        lbl_periodo.grid(row=0, column=3, padx=10)
+
 
         # Obtiene todos los grupos
         grupos = self.grupos.obtener_grupo()
@@ -219,6 +222,7 @@ class InterfazAdmin:
             ctk.CTkLabel(self.scrollableframe_grupos, text=str(grupo[0])).grid(row=columna, column=0, padx=10, pady=5)
             ctk.CTkLabel(self.scrollableframe_grupos, text=str(grupo[1])).grid(row=columna, column=1, padx=10, pady=5)
             ctk.CTkLabel(self.scrollableframe_grupos, text=str(grupo[2])).grid(row=columna, column=2, padx=10, pady=5)
+            ctk.CTkLabel(self.scrollableframe_grupos, text=str(grupo[3])).grid(row=columna, column=3, padx=10, pady=5)
 
         # Formulario para crear, modificar y eliminar grupo
         form_frame = ctk.CTkFrame(self.frame_grupos)
@@ -240,6 +244,11 @@ class InterfazAdmin:
         self.entry_periodo = ctk.CTkEntry(form_frame, width=150)
         self.entry_periodo.grid(row=2, column=1, padx=5, pady=5)
 
+        lbl_id_docente = ctk.CTkLabel(form_frame, text="ID Docente:")
+        lbl_id_docente.grid(row=3, column=0, padx=5, pady=5)
+        self.entry_docente = ctk.CTkEntry(form_frame, width=150)
+        self.entry_docente.grid(row=3, column=1, padx=5, pady=5)
+
         # Botones para acciones
         btn_frame = ctk.CTkFrame(self.frame_grupos)
         btn_frame.pack(pady=10)
@@ -249,7 +258,8 @@ class InterfazAdmin:
             id_grupo = self.entry_id_grupo.get()
             nombre = self.entry_nombre_grupo.get()
             periodo = self.entry_periodo.get()
-            c.admin.crear_grupo(id_grupo, nombre, periodo)
+            id_docente = self.entry_docente.get()
+            c.admin.crear_grupo(self, id_grupo, nombre, periodo, id_docente)
             messagebox.showinfo("Éxito", "Grupo creado satisfactoriamente.")
             self.frame_grupos.destroy()
             self._construir_tab_grupos()
@@ -259,7 +269,8 @@ class InterfazAdmin:
             id_grupo = self.entry_id_grupo.get()
             nombre = self.entry_nombre_grupo.get()
             periodo = self.entry_periodo.get()
-            c.admin.modificar_grupo(id_grupo, nombre, periodo)
+            id_docente = self.entry_docente.get()
+            c.admin.modificar_grupo(self, id_grupo, nombre, periodo, id_docente)
             messagebox.showinfo("Éxito", "Grupo modificado satisfactoriamente.")
             self.frame_grupos.destroy()
             self._construir_tab_grupos()
@@ -267,7 +278,7 @@ class InterfazAdmin:
         # Función para eliminar grupo
         def eliminar_grupo():
             id_grupo = self.entry_id_grupo.get()
-            c.admin.eliminar_grupo(id_grupo)
+            c.admin.eliminar_grupo(self, id_grupo)
             messagebox.showinfo("Éxito", "Grupo eliminado satisfactoriamente.")
             self.frame_grupos.destroy()
             self._construir_tab_grupos()
@@ -303,10 +314,10 @@ class InterfazAdmin:
         lbl_id_materia.grid(row=0, column=0, padx=10)
         lbl_nombre = ctk.CTkLabel(self.scrollableframe_materias, text="Nombre")
         lbl_nombre.grid(row=0, column=1, padx=10)
-        lbl_id_grupo = ctk.CTkLabel(self.scrollableframe_materias, text="ID Grupo")
-        lbl_id_grupo.grid(row=0, column=2, padx=10)
         lbl_id_docente = ctk.CTkLabel(self.scrollableframe_materias, text="ID docente")
-        lbl_id_docente.grid(row=0, column=3, padx=10)
+        lbl_id_docente.grid(row=0, column=2, padx=10)
+        lbl_id_grupo = ctk.CTkLabel(self.scrollableframe_materias, text="ID Grupo")
+        lbl_id_grupo.grid(row=0, column=3, padx=10)
 
         # Muestra cada materia
         materias = self.materias.obtener_materias()
@@ -347,11 +358,10 @@ class InterfazAdmin:
 
         # Funciones para crear, modificar, eliminar materias
         def crear_materia():
-            id_matera = self.entry_id_materia.get()
             nombre = self.entry_nombre_materia.get()
             id_grupo = self.entry_id_grupo_materia.get()
             id_docente = self.entry_id_docente_materia.get()
-            c.admin.crear_materia(id_matera, nombre, id_grupo, id_docente)
+            c.admin.crear_materia(self, nombre, id_grupo, id_docente)
             messagebox.showinfo("Éxito", "Materia creada satisfactoriamente.")
             self.frame_materias.destroy()
             self._construir_tab_materias()
@@ -361,14 +371,14 @@ class InterfazAdmin:
             nombre = self.entry_nombre_materia.get()
             id_grupo = self.entry_id_grupo_materia.get()
             id_docente = self.entry_id_docente_materia.get()
-            c.admin.modificar_materia(id_matera, nombre, id_grupo, id_docente)
+            c.admin.modificar_materia(self, id_matera, nombre, id_grupo, id_docente)
             messagebox.showinfo("Éxito", "Materia modificada satisfactoriamente.")
             self.frame_materias.destroy()
             self._construir_tab_materias()
 
         def eliminar_materia():
             id_materia = self.entry_id_materia.get()
-            c.admin.eliminar_materia(id_materia)
+            c.admin.eliminar_materia(self, id_materia)
             messagebox.showinfo("Éxito", "Materia eliminada satisfactoriamente.")
             self.frame_materias.destroy()
             self._construir_tab_materias()

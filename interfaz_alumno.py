@@ -9,7 +9,7 @@ class InterfazAlumno:
         # Configuración de la ventana
         self.root = root
         self.root.title("Interfaz Alumno")
-        self.root.geometry("400x300")
+        self.root.geometry("600x400")
         self.root.resizable(True, True)
 
         # Guardamos el nombre del alumno (usuario)
@@ -66,7 +66,7 @@ class InterfazAlumno:
         label_asistencias.pack(pady=10)
 
         # Frame scrollable
-        self.scrollableframe_asistencias = ctk.CTkScrollableFrame(main_frame_ver_asistencia, width=1000, height=1000)
+        self.scrollableframe_asistencias = ctk.CTkScrollableFrame(main_frame_ver_asistencia, width=400, height=200)
         self.scrollableframe_asistencias.pack(pady=10)
 
         # Encabezados de columnas
@@ -98,27 +98,27 @@ class InterfazAlumno:
         # Insertamos los datos en el scrollableframe 
         for i, fila in enumerate(registros, start=1):
             # fila = (id_usuario, usuario_nombre, id_materia, materia_nombre, fecha, hora, asistencia)
-            materia_nombre = fila[3]
-            fecha = str(fila[4])
-            hora = str(fila[5])
-            codigo_asistencia = fila[6]
+            materia_id = fila[2]
+            fecha = str(fila[3])
+            hora = str(fila[4])
+            codigo_asistencia = fila[5]
             asistencia_texto = asistencia_a_texto(codigo_asistencia)
 
-            # Materia
-            lbl_materia = ctk.CTkLabel(self.scrollableframe_asistencias, text=materia_nombre)
+            lbl_materia = ctk.CTkLabel(self.scrollableframe_asistencias, text=materia_id)
             lbl_materia.grid(row=i, column=0, padx=20)
 
-            # Asistencia
-            lbl_asistencia = ctk.CTkLabel(self.scrollableframe_asistencias, text=asistencia_texto)
-            lbl_asistencia.grid(row=i, column=1, padx=20)
-
-            # Fecha
             lbl_fecha = ctk.CTkLabel(self.scrollableframe_asistencias, text=fecha)
-            lbl_fecha.grid(row=i, column=2, padx=20)
+            lbl_fecha.grid(row=i, column=1, padx=20)
 
-            # Hora
-            lbl_hora = ctk.CTkLabel(self.scrollableframe_asistencias, text=hora)
-            lbl_hora.grid(row=i, column=3, padx=20)
+            lb_hora = ctk.CTkLabel(self.scrollableframe_asistencias, text=hora)
+            lb_hora.grid(row=i, column=2, padx=20)
+
+            label_asistencia = ctk.CTkLabel(self.scrollableframe_asistencias, text=asistencia_texto)
+            label_asistencia.grid(row=i, column=3, padx=20)
+
+        # Botón para regresar
+        self.button_regresar = ctk.CTkButton(main_frame_ver_asistencia, text="Regresar", command=self.regresar_button)
+        self.button_regresar.pack(pady=10)
 
     def marcar_asistencia(self):
         # Damos valores a la variables usando la información del usuario y del combobox
